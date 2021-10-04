@@ -10,8 +10,9 @@ Swarm Ingress OpenResty is a ingress service for Docker in Swarm mode that makes
 - Integrated TLS decryption for services which provide a certificate and key
 - Automatic service discovery and load balancing handled by Docker
 - Scaled and maintained by the Swarm for high resilience and performance
-- On the fly SSL registration and renewal inside
+- On the fly SSL registration and renewal
 
+### SSL registration and renewal
 
 This OpenResty plugin automatically and transparently issues SSL certificates from Let's Encrypt as requests are received using [lua-resty-auto-ssl](https://github.com/auto-ssl/lua-resty-auto-ssl) plugin. It works like:
 
@@ -58,8 +59,7 @@ By default a request would be redirected to `http://service-name:80/`.
 | ------- | -------- | ------- | ----------- |
 | `ingress.host` | `yes` | `-`      | When configured ingress is enabled. The hostname which should be mapped to the service. Wildcards `*` and regular expressions are allowed. |
 | `ingress.port` | `no`  | `80`    | The port which serves the service in the cluster. |
-| `ingress.path` | `no`  | `/`     | A optional path which is prefixed when routing requests to the 
-service. |
+| `ingress.path` | `no`  | `/`     | A optional path which is prefixed when routing requests to the service. |
 | `ingress.ssl` | `no` | `-` | Enable SSL provisioning for host | 
 | `ingress.ssl_redirect` | `no` | `-` | Enable automatic redirect from HTTP to HTTPS | 
 
