@@ -1,0 +1,51 @@
+#!/opt/ingress/bin/python3
+
+from docker import APIClient
+from jinja2 import Template
+
+import sys
+import os
+import subprocess
+import time
+import setproctitle
+
+setproctitle.setproctitle(sys.argv[0])
+
+nginx_config_template_path = '/opt/ingress/ingressd.j2'
+nginx_config_path = '/usr/local/openresty/nginx/conf/nginx.conf'
+
+with open(nginx_config_path, 'r') as handle:
+    current_nginx_config = handle.read()
+
+with open(nginx_config_template_path, 'r') as handle:
+    nginx_config_template = handle.read()
+
+subprocess.Popen(['/usr/local/openresty/bin/openresty'])
+
+cli = APIClient(base_url = os.environ['DOCKER_HOST'])
+
+def run():
+    while True:
+        services = cli.services()
+
+        new_nginx_config = Template(nginx_config_template).render(
+            config = services,
+        )
+
+        if current_nginx_config != new_nginx_config:
+            current_nginx_config = new_nginx_config
+            print("Services have changed, updating nginx configuration...")
+
+            with open(nginx_config_path, 'w') as handle:
+                handle.write(new_nginx_config)
+
+            # Reload nginx with the new configuration
+            subprocess.call(['/usr/local/openresty/bin/openresty', '-s', 'reload'])
+
+            if os.environ['DEBUG'] in ['true', 'yes', '1']:
+                print(new_nginx_config)
+
+        time.sleep(int(os.environ['UPDATE_INTERVAL']))
+
+if __name__ == "__main__":
+    run()
