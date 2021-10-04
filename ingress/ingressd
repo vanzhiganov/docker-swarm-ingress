@@ -24,28 +24,24 @@ subprocess.Popen(['/usr/local/openresty/bin/openresty'])
 
 cli = APIClient(base_url = os.environ['DOCKER_HOST'])
 
-def run():
-    while True:
-        services = cli.services()
+while True:
+    services = cli.services()
 
-        new_nginx_config = Template(nginx_config_template).render(
-            config = services,
-        )
+    new_nginx_config = Template(nginx_config_template).render(
+        config = services,
+    )
 
-        if current_nginx_config != new_nginx_config:
-            current_nginx_config = new_nginx_config
-            print("Services have changed, updating nginx configuration...")
+    if current_nginx_config != new_nginx_config:
+        current_nginx_config = new_nginx_config
+        print("Services have changed, updating nginx configuration...")
 
-            with open(nginx_config_path, 'w') as handle:
-                handle.write(new_nginx_config)
+        with open(nginx_config_path, 'w') as handle:
+            handle.write(new_nginx_config)
 
-            # Reload nginx with the new configuration
-            subprocess.call(['/usr/local/openresty/bin/openresty', '-s', 'reload'])
+        # Reload nginx with the new configuration
+        subprocess.call(['/usr/local/openresty/bin/openresty', '-s', 'reload'])
 
-            if os.environ['DEBUG'] in ['true', 'yes', '1']:
-                print(new_nginx_config)
+        if os.environ['DEBUG'] in ['true', 'yes', '1']:
+            print(new_nginx_config)
 
-        time.sleep(int(os.environ['UPDATE_INTERVAL']))
-
-if __name__ == "__main__":
-    run()
+    time.sleep(int(os.environ['UPDATE_INTERVAL']))

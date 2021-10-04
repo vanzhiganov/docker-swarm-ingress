@@ -21,4 +21,7 @@ ADD ingress/ingressd.j2 /opt/ingress
 ADD ingress/ingressd /opt/ingress/bin/ingressd
 RUN chmod +x /opt/ingress/bin/ingressd
 
+HEALTHCHECK --interval=30s --timeout=3s \
+	CMD curl -f http://localhost/ || exit 1
+
 ENTRYPOINT ["/opt/ingress/bin/ingressd"]
