@@ -1,6 +1,6 @@
 # Ingress Service for Docker Swarm
 
-[![Docker Stars](https://img.shields.io/docker/stars/opcycle/docker-swarm-ingress-openresty.svg?style=flat-square)](https://hub.docker.com/r/opcycle/docker-swarm-ingress-openresty/) [![Docker Pulls](https://img.shields.io/docker/pulls/opcycle/docker-swarm-ingress-openresty.svg?style=flat-square)](https://hub.docker.com/r/opcycle/docker-swarm-ingress-openresty/)
+[![Docker Stars](https://img.shields.io/docker/stars/opcycle/swarm-ingress-openresty.svg?style=flat-square)](https://hub.docker.com/opcycle/swarm-ingress-openresty/) [![Docker Pulls](https://img.shields.io/docker/pulls/opcycle/swarm-ingress-openresty.svg?style=flat-square)](https://hub.docker.com/opcycle/swarm-ingress-openresty/)
 
 This is a minimalistic approach to allow a routing of external requests into a
 Docker Swarm while routing based on the public hostname.
