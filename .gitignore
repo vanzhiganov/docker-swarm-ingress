@@ -1,1 +1,3 @@
 .DS_Store
+ingressd/ingressd
+ingressd/proxy.conf
