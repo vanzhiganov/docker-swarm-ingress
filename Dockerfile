@@ -1,6 +1,6 @@
 FROM golang AS build
 
-RUN ls -la
+COPY . .
 RUN cd ingressd && go build
 
 FROM openresty/openresty:bionic
