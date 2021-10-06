@@ -1,4 +1,4 @@
-module ingressd
+module ingress
 
 go 1.17
 
