@@ -19,7 +19,7 @@ RUN openssl req -new -newkey rsa:2048 -days 3650 -nodes -x509 -subj '/CN=sni-sup
 	-keyout /etc/ssl/resty-auto-ssl-fallback.key \
 	-out /etc/ssl/resty-auto-ssl-fallback.crt
 
-COPY --from=build ingressd/ingressd /usr/bin/ingressd
+COPY --from=build /ingressd/ingressd /usr/bin/ingressd
 
 RUN mkdir -p /etc/ingressd
 ADD ingressd/ingressd.tpl /etc/ingressd
