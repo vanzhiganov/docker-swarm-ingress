@@ -26,7 +26,7 @@ RUN rm -f /etc/nginx/conf.d/default.conf
 ADD ingress/ingress.tpl /etc/ingress
 ADD nginx.conf /usr/local/openresty/nginx/conf/nginx.conf
 
-HEALTHCHECK --interval=30s --timeout=3s \
+HEALTHCHECK --interval=3s --timeout=3s \
 	CMD curl -f http://localhost/ || exit 1
 
 ENTRYPOINT ["/usr/bin/ingress"]
