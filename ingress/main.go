@@ -214,16 +214,16 @@ func main() {
 	}
 
 	ingress := NewIngress(outputFile, templateFile)
-
-	//ingress.StartProxyServer()
+	ingress.StartProxyServer()
 
 	for {
 		ingress.GetServices()
 
 		if ingress.IsReloadRequired() || !ingress.IsConfigExists() {
-			ingress.GenerateTemplate()
 			fmt.Println("Configuration updated, reload proxy server...")
-			//ingress.ReloadProxyServer()
+
+			ingress.GenerateTemplate()
+			ingress.ReloadProxyServer()
 			ingress.UpdatePrevState()
 		}
 
