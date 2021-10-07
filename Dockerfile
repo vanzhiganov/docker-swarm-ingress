@@ -24,7 +24,7 @@ COPY --from=build /src/ingress/ingress /usr/bin/ingress
 RUN mkdir -p /etc/ingress
 RUN rm -f /etc/nginx/conf.d/default.conf
 ADD ingress/ingress.tpl /etc/ingress
-#ADD nginx.conf /usr/local/openresty/nginx/conf/nginx.conf
+ADD nginx.conf /usr/local/openresty/nginx/conf/nginx.conf
 
 HEALTHCHECK --interval=3s --timeout=3s \
 	CMD curl -f http://localhost/ || exit 1

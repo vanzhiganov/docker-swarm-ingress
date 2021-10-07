@@ -218,7 +218,7 @@ func main() {
 
 	ingress := NewIngress(outputFile, templateFile)
 	ingress.StartProxyServer()
-	reloadDone := true
+
 	for {
 		ingress.GetServices()
 
@@ -226,19 +226,8 @@ func main() {
 			fmt.Println("Configuration updated, reload proxy server...")
 
 			ingress.GenerateTemplate()
-
-			reloadDone = false
-			if ingress.ReloadProxyServer() {
-				reloadDone = true
-			}
-
+			ingress.ReloadProxyServer()
 			ingress.UpdatePrevState()
-		}
-
-		if !reloadDone {
-			if ingress.ReloadProxyServer() {
-				reloadDone = true
-			}
 		}
 
 		time.Sleep(time.Duration(updateInterval) * time.Second)
