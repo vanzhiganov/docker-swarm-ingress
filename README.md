@@ -28,7 +28,7 @@ to the public an redirects all requests to the correct service in background.
 It is important that the ingress service can reach other services via the Swarm
 network (that means they must share a network).
 
-```
+```bash
 docker service create --name ingress \
   --network ingress-routing \
   -p 80:80 \
@@ -71,7 +71,7 @@ shares a network. A good way to do so is to create a common network `ingress-rou
 
 To start a service with ingress simply pass the required labels on creation.
 
-```
+```bash
 docker service create --name my-service \
   --network ingress-routing \
   --label ingress.host=my-service.company.tld \
@@ -82,7 +82,7 @@ docker service create --name my-service \
 
 It is also possible to later add a service to ingress using `service update`.
 
-```
+```bash
 docker service update \
   --label-add ingress.host=my-service.company.tld \
   --label-add ingress.port=8080 \
