@@ -92,12 +92,15 @@ func (s *Ingress) StartProxyServer() {
 	}()
 }
 
-func (s *Ingress) ReloadProxyServer() {
+func (s *Ingress) ReloadProxyServer() bool {
 	outputCmd, err := exec.Command("/usr/local/openresty/bin/openresty", "-s", "reload").Output()
 	if err != nil {
 		fmt.Printf("Failed to execute command: %s", outputCmd)
 		fmt.Println(err)
+		return false
 	}
+
+	return true
 }
 
 func (s *Ingress) GenerateTemplate() {
@@ -215,7 +218,7 @@ func main() {
 
 	ingress := NewIngress(outputFile, templateFile)
 	ingress.StartProxyServer()
-
+	reloadDone := true
 	for {
 		ingress.GetServices()
 
@@ -223,8 +226,19 @@ func main() {
 			fmt.Println("Configuration updated, reload proxy server...")
 
 			ingress.GenerateTemplate()
-			ingress.ReloadProxyServer()
+
+			reloadDone = false
+			if ingress.ReloadProxyServer() {
+				reloadDone = true
+			}
+
 			ingress.UpdatePrevState()
+		}
+
+		if !reloadDone {
+			if ingress.ReloadProxyServer() {
+				reloadDone = true
+			}
 		}
 
 		time.Sleep(time.Duration(updateInterval) * time.Second)
