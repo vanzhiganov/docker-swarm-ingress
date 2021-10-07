@@ -228,8 +228,9 @@ func main() {
 			fmt.Println("Configuration updated, reload proxy server...")
 
 			ingress.GenerateTemplate()
-			ingress.ReloadProxyServer()
-			ingress.UpdatePrevState()
+			if ingress.ReloadProxyServer() {
+				ingress.UpdatePrevState()
+			}
 		}
 
 		time.Sleep(time.Duration(updateInterval) * time.Second)
