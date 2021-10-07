@@ -79,6 +79,8 @@ func NewIngress(outputFile string, templateFile string) *Ingress {
 
 func (s *Ingress) StartProxyServer() {
 	cmd := exec.Command("/usr/local/openresty/bin/openresty")
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
 	err := cmd.Start()
 	if err != nil {
 		panic(err)

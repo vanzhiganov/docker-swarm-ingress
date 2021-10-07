@@ -75,8 +75,8 @@ To start a service with ingress simply pass the required labels on creation.
 docker service create --name my-service \
   --network ingress-routing \
   --label ingress.host=my-service.company.tld \
-  --label ingress.ssl=enable \
-  --label ingress.ssl_redirect=enable \
+  --label ingress.ssl=yes \
+  --label ingress.ssl_redirect=yes \
   nginx
 ```
 
