@@ -5,6 +5,7 @@ go 1.17
 require (
 	github.com/docker/cli v20.10.9+incompatible
 	github.com/docker/docker v20.10.9+incompatible
+	github.com/google/go-cmp v0.5.5
 )
 
 require (

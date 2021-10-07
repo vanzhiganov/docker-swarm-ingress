@@ -14,6 +14,7 @@ import (
 	"github.com/docker/cli/cli/connhelper"
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/client"
+	"github.com/google/go-cmp/cmp"
 )
 
 type ServiceEntry struct {
@@ -25,17 +26,12 @@ type ServiceEntry struct {
 	ServiceRedirectSSL bool
 }
 
-type IngressConfig struct {
-	UpdateInterval int
-	OutputFile     string
-	templateFile   string
-}
-
 type Ingress struct {
-	DockerClient    *client.Client
-	OutputFile      string
-	ServiceEntries  []ServiceEntry
-	ServiceTemplate *template.Template
+	DockerClient       *client.Client
+	OutputFile         string
+	ServiceEntries     []ServiceEntry
+	ServiceEntriesPrev []ServiceEntry
+	ServiceTemplate    *template.Template
 }
 
 func GetEnv(key, defaultValue string) string {
@@ -105,23 +101,17 @@ func (s *Ingress) ReloadProxyServer() {
 }
 
 func (s *Ingress) GenerateTemplate() {
-	if _, err := os.Stat(string(s.OutputFile)); err == nil {
-		err = os.Remove(string(s.OutputFile))
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
-	}
-
-	f, err := os.Create(string(s.OutputFile))
+	f, err := os.Create(s.OutputFile)
 	if err != nil {
-		fmt.Println("Create file Error: ", err)
+		fmt.Println("Create file error: ", err)
 		return
 	}
 
 	if err := s.ServiceTemplate.Execute(f, s.ServiceEntries); err != nil {
 		fmt.Println(err)
 	}
+
+	f.Close()
 }
 
 func (s *Ingress) GetServices() {
@@ -129,6 +119,8 @@ func (s *Ingress) GetServices() {
 	if err != nil {
 		panic(err)
 	}
+
+	s.ServiceEntries = make([]ServiceEntry, 0)
 
 	for _, svc := range services {
 		servicePath := "/"
@@ -181,6 +173,37 @@ func (s *Ingress) GetServices() {
 	}
 }
 
+func (s *Ingress) IsConfigExists() bool {
+	if _, err := os.Stat(s.OutputFile); err != nil {
+		return false
+	}
+
+	return true
+}
+
+func (s *Ingress) IsReloadRequired() bool {
+	count := 0
+
+	for _, current := range s.ServiceEntries {
+		for _, prev := range s.ServiceEntriesPrev {
+			if cmp.Equal(current, prev) {
+				count++
+			}
+		}
+	}
+
+	if count == len(s.ServiceEntries) && len(s.ServiceEntries) == len(s.ServiceEntriesPrev) {
+		return false
+	}
+
+	return true
+}
+
+func (s *Ingress) UpdatePrevState() {
+	s.ServiceEntriesPrev = make([]ServiceEntry, len(s.ServiceEntries))
+	copy(s.ServiceEntriesPrev, s.ServiceEntries)
+}
+
 func main() {
 	templateFile := GetEnv("TEMPLATE_FILE", "ingress.tpl")
 	outputFile := GetEnv("OUTPUT_FILE", "proxy.conf")
@@ -192,12 +215,17 @@ func main() {
 
 	ingress := NewIngress(outputFile, templateFile)
 
-	ingress.StartProxyServer()
+	//ingress.StartProxyServer()
 
 	for {
 		ingress.GetServices()
-		ingress.GenerateTemplate()
-		ingress.ReloadProxyServer()
+
+		if ingress.IsReloadRequired() || !ingress.IsConfigExists() {
+			ingress.GenerateTemplate()
+			fmt.Println("Configuration updated, reload proxy server...")
+			//ingress.ReloadProxyServer()
+			ingress.UpdatePrevState()
+		}
 
 		time.Sleep(time.Duration(updateInterval) * time.Second)
 	}
