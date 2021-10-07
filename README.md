@@ -57,7 +57,7 @@ By default a request would be redirected to `http://service-name:80/`.
 
 | Label   | Required | Default | Description |
 | ------- | -------- | ------- | ----------- |
-| `ingress.host` | `yes` | `-`      | When configured ingress is enabled. The hostname which should be mapped to the service. Wildcards `*` and regular expressions are allowed. |
+| `ingress.host` | `yes` | `-`      | When configured ingress is enabled. The hostname which should be mapped to the service. Multiple domain supported using `ingress.host0` .. `ingress.hostN` |
 | `ingress.port` | `no`  | `80`    | The port which serves the service in the cluster. |
 | `ingress.path` | `no`  | `/`     | A optional path which is prefixed when routing requests to the service. |
 | `ingress.ssl` | `no` | `-` | Enable SSL provisioning for host | 
