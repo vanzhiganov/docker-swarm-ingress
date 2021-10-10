@@ -1,6 +1,6 @@
 # Ingress Service for Docker Swarm
 
-[![Docker Stars](https://img.shields.io/docker/stars/opcycle/swarm-ingress.svg?style=flat-square)](https://hub.docker.com/opcycle/swarm-ingress/) [![Docker Pulls](https://img.shields.io/docker/pulls/opcycle/swarm-ingress.svg?style=flat-square)](https://hub.docker.com/opcycle/swarm-ingress/)
+[![Docker Stars](https://img.shields.io/docker/stars/opcycle/swarm-ingress.svg?style=flat-square)](https://hub.docker.com/r/opcycle/swarm-ingress) [![Docker Pulls](https://img.shields.io/docker/pulls/opcycle/swarm-ingress.svg?style=flat-square)](https://hub.docker.com/r/opcycle/swarm-ingress)
 
 Swarm Ingress OpenResty is a ingress service for Docker in Swarm mode that makes deploying microservices easy. It configures itself automatically and dynamically using services labels.
 
