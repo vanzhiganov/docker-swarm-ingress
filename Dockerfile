@@ -5,7 +5,8 @@ RUN cd /src/ingress && go build
 
 FROM openresty/openresty:bionic
 
-MAINTAINER opcycle <oss@opcycle.net>
+LABEL maintainer="OpCycle <oss@opcycle.net>"
+LABEL repository="https://github.com/opcycle/docker-swarm-ingress"
 
 ENV DOCKER_HOST "unix:///var/run/docker.sock"
 ENV UPDATE_INTERVAL "1"
@@ -29,6 +30,6 @@ ADD ingress/ingress.tpl /etc/ingress
 ADD nginx.conf /usr/local/openresty/nginx/conf/nginx.conf
 
 HEALTHCHECK --interval=3s --timeout=3s \
-	CMD curl -f http://localhost/ || exit 1
+	CMD curl -f http://localhost/health || exit 1
 
 ENTRYPOINT ["/usr/bin/ingress"]

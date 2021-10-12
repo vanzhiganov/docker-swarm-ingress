@@ -96,7 +96,7 @@ We'd love for you to contribute to this container. You can request new features 
 If you encountered a problem running this container, you can file an issue. For us to provide better support, be sure to include the following information in your issue:
 
 - Host OS and version
-- Docker version (docker version)
+- Docker version
 - Output of docker info
 - Version of this container
 - The command you used to run the container, and any relevant output you saw (masking any sensitive information)

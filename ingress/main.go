@@ -86,8 +86,6 @@ func (s *Ingress) StartProxyServer() {
 		panic(err)
 	}
 
-	// use goroutine waiting, manage process
-	// this is important, otherwise the process becomes in S mode
 	go func() {
 		err = cmd.Wait()
 		fmt.Printf("Command finished with error: %v", err)
@@ -229,6 +227,7 @@ func main() {
 
 			ingress.GenerateTemplate()
 			if ingress.ReloadProxyServer() {
+				fmt.Println("Proxy server reloaded")
 				ingress.UpdatePrevState()
 			}
 		}
