@@ -19,6 +19,7 @@ RUN dnf install -y dnf-plugins-core \
         openresty \
         openresty-opm \
         openresty-resty \
+		openssl \
         tar \
         unzip \
     && cd /tmp \
