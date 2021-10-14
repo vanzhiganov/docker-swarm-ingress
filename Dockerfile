@@ -60,7 +60,7 @@ RUN openssl req -new -newkey rsa:2048 -days 3650 -nodes -x509 -subj '/CN=sni-sup
 COPY --from=build /src/ingress/ingress /usr/bin/ingress
 
 RUN mkdir /etc/resty-auto-ssl
-RUN chown www-data /etc/resty-auto-ssl
+RUN chown nginx /etc/resty-auto-ssl
 RUN mkdir -p /etc/ingress
 RUN rm -f /etc/nginx/conf.d/default.conf
 ADD ingress/ingress.tpl /etc/ingress
