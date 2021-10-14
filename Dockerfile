@@ -47,7 +47,7 @@ ENV LUA_PATH="/usr/local/openresty/site/lualib/?.ljbc;/usr/local/openresty/site/
 ENV LUA_CPATH="/usr/local/openresty/site/lualib/?.so;/usr/local/openresty/lualib/?.so;./?.so;/usr/local/lib/lua/5.1/?.so;/usr/local/openresty/luajit/lib/lua/5.1/?.so;/usr/local/lib/lua/5.1/loadall.so;/usr/local/openresty/luajit/lib/lua/5.1/?.so"
 ENV DOCKER_HOST "unix:///var/run/docker.sock"
 ENV UPDATE_INTERVAL "1"
-ENV OUTPUT_FILE "/etc/nginx/conf.d/proxy.conf"
+ENV OUTPUT_FILE "/usr/local/openresty/nginx/conf/conf.d/proxy.conf"
 ENV TEMPLATE_FILE "/etc/ingress/ingress.tpl"
 ENV OPENRESTY_USER="openresty" \
     OPENRESTY_UID="8983" \
@@ -66,10 +66,11 @@ RUN openssl req -new -newkey rsa:2048 -days 3650 -nodes -x509 -subj '/CN=sni-sup
 
 COPY --from=build /src/ingress/ingress /usr/bin/ingress
 
-RUN mkdir /etc/resty-auto-ssl
-RUN chown openresty /etc/resty-auto-ssl
+RUN mkdir -p /etc/resty-auto-ssl
+RUN mkdir -p /usr/local/openresty/nginx/conf/conf.d
 RUN mkdir -p /etc/ingress
-RUN rm -f /etc/nginx/conf.d/default.conf
+
+RUN chown openresty /etc/resty-auto-ssl
 ADD ingress/ingress.tpl /etc/ingress
 ADD nginx.conf /usr/local/openresty/nginx/conf/nginx.conf
 
