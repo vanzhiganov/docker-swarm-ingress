@@ -4,6 +4,12 @@
 
 Swarm Ingress OpenResty is a ingress service for Docker in Swarm mode that makes deploying microservices easy. It configures itself automatically and dynamically using services labels.
 
+#### Docker Images
+
+- All images based on Fedora Linux
+- [GitHub actions builds](https://github.com/opcycle/docker-swarm-ingress/actions) 
+- [Docker Hub](https://hub.docker.com/r/opcycle/swarm-ingress)
+
 ### Features
 
 - No external load balancer or config files needed making for easy deployments
