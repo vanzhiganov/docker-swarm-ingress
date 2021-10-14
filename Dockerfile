@@ -54,8 +54,8 @@ ENV OPENRESTY_USER="openresty" \
     OPENRESTY_GROUP="openresty" \
     OPENRESTY_GID="8983"
 
-RUN groupadd -r --gid "$SOLR_GID" "$SOLR_GROUP"
-RUN useradd -r --uid "$SOLR_UID" --gid "$SOLR_GID" "$SOLR_USER"
+RUN groupadd -r --gid $OPENRESTY_GID $OPENRESTY_GROUP
+RUN useradd -r --uid $OPENRESTY_UID --gid $OPENRESTY_GID $OPENRESTY_USER
 
 RUN /usr/local/openresty/luajit/bin/luarocks install lua-resty-auto-ssl
 RUN /usr/local/openresty/luajit/bin/luarocks install lua-resty-http
