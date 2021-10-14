@@ -62,6 +62,9 @@ By default a request would be redirected to `http://service-name:80/`.
 | `ingress.path` | `no`  | `/`     | A optional path which is prefixed when routing requests to the service. |
 | `ingress.ssl` | `no` | `-` | Enable SSL provisioning for host | 
 | `ingress.ssl_redirect` | `no` | `-` | Enable automatic redirect from HTTP to HTTPS | 
+| `ingress.max_body_size` | `no` | `10m` | Max request body size | 
+| `ingress.proxy_timeout` | `no` | `600` | Proxy timeout | 
+
 
 ### Run a Service with Enabled Ingress
 

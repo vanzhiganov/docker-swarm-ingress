@@ -18,12 +18,14 @@ import (
 )
 
 type ServiceEntry struct {
-	ServiceName        string
-	ServiceDomain      string
-	ServicePath        string
-	ServicePort        string
-	ServiceSSL         bool
-	ServiceRedirectSSL bool
+	ServiceName         string
+	ServiceDomain       string
+	ServicePath         string
+	ServicePort         string
+	ServiceMaxBodySize  string
+	ServiceProxyTimeout string
+	ServiceSSL          bool
+	ServiceRedirectSSL  bool
 }
 
 type Ingress struct {
@@ -130,6 +132,8 @@ func (s *Ingress) GetServices() {
 		servicePort := "80"
 		serviceSSL := false
 		serviceRedirectSSL := false
+		serviceMaxBodySize := "10m"
+		serviceProxyTimeout := "600"
 
 		if val, ok := svc.Spec.Labels["ingress.path"]; ok {
 			servicePath = val
@@ -151,6 +155,14 @@ func (s *Ingress) GetServices() {
 			}
 		}
 
+		if val, ok := svc.Spec.Labels["ingress.max_body_size"]; ok {
+			serviceMaxBodySize = val
+		}
+
+		if val, ok := svc.Spec.Labels["ingress.proxy_timeout"]; ok {
+			serviceProxyTimeout = val
+		}
+
 		domainKeys := make([]string, 0, len(svc.Spec.Labels))
 
 		for key := range svc.Spec.Labels {
@@ -162,12 +174,14 @@ func (s *Ingress) GetServices() {
 		for _, domainKey := range domainKeys {
 			if val, ok := svc.Spec.Labels[domainKey]; ok {
 				entry := &ServiceEntry{
-					ServiceName:        svc.Spec.Name,
-					ServiceDomain:      val,
-					ServicePath:        servicePath,
-					ServicePort:        servicePort,
-					ServiceSSL:         serviceSSL,
-					ServiceRedirectSSL: serviceRedirectSSL,
+					ServiceName:         svc.Spec.Name,
+					ServiceDomain:       val,
+					ServicePath:         servicePath,
+					ServicePort:         servicePort,
+					ServiceSSL:          serviceSSL,
+					ServiceRedirectSSL:  serviceRedirectSSL,
+					ServiceMaxBodySize:  serviceMaxBodySize,
+					ServiceProxyTimeout: serviceProxyTimeout,
 				}
 
 				s.ServiceEntries = append(s.ServiceEntries, *entry)

@@ -3,6 +3,8 @@ server {
   listen 80;
   server_name {{ $element.ServiceDomain }};
 
+  client_max_body_size {{ $element.ServiceMaxBodySize }};
+
   # Endpoint used for performing domain verification with Let's Encrypt.
   location /.well-known/acme-challenge/ {
     content_by_lua_block {
@@ -17,6 +19,11 @@ server {
   {{ else -}}
   location / {
     resolver 127.0.0.11;
+    
+    proxy_connect_timeout {{ $element.ServiceProxyTimeout }};
+    proxy_send_timeout {{ $element.ServiceProxyTimeout }};
+    proxy_read_timeout {{ $element.ServiceProxyTimeout }};
+
     proxy_pass http://{{ $element.ServiceName }}:{{ $element.ServicePort }}{{ $element.ServicePath }};
   }
   {{- end }}
@@ -27,6 +34,8 @@ server {
   listen 443 ssl;
   server_name {{ $element.ServiceDomain }};
   
+  client_max_body_size {{ $element.ServiceMaxBodySize }};
+
   # Dynamic handler for issuing or returning certs for SNI domains.
   ssl_certificate_by_lua_block {
     auto_ssl:ssl_certificate()
@@ -34,6 +43,11 @@ server {
 
   location / {
     resolver 127.0.0.11;
+    
+    proxy_connect_timeout {{ $element.ServiceProxyTimeout }};
+    proxy_send_timeout {{ $element.ServiceProxyTimeout }};
+    proxy_read_timeout {{ $element.ServiceProxyTimeout }};
+
     proxy_pass http://{{ $element.ServiceName }}:{{ $element.ServicePort }}{{ $element.ServicePath }};
   }
 
