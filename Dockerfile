@@ -49,6 +49,13 @@ ENV DOCKER_HOST "unix:///var/run/docker.sock"
 ENV UPDATE_INTERVAL "1"
 ENV OUTPUT_FILE "/etc/nginx/conf.d/proxy.conf"
 ENV TEMPLATE_FILE "/etc/ingress/ingress.tpl"
+ENV OPENRESTY_USER="openresty" \
+    OPENRESTY_UID="8983" \
+    OPENRESTY_GROUP="openresty" \
+    OPENRESTY_GID="8983"
+
+RUN groupadd -r --gid "$SOLR_GID" "$SOLR_GROUP"
+RUN useradd -r --uid "$SOLR_UID" --gid "$SOLR_GID" "$SOLR_USER"
 
 RUN /usr/local/openresty/luajit/bin/luarocks install lua-resty-auto-ssl
 RUN /usr/local/openresty/luajit/bin/luarocks install lua-resty-http
@@ -60,7 +67,7 @@ RUN openssl req -new -newkey rsa:2048 -days 3650 -nodes -x509 -subj '/CN=sni-sup
 COPY --from=build /src/ingress/ingress /usr/bin/ingress
 
 RUN mkdir /etc/resty-auto-ssl
-RUN chown nginx /etc/resty-auto-ssl
+RUN chown openresty /etc/resty-auto-ssl
 RUN mkdir -p /etc/ingress
 RUN rm -f /etc/nginx/conf.d/default.conf
 ADD ingress/ingress.tpl /etc/ingress
