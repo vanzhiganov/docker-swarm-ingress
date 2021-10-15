@@ -20,9 +20,9 @@ server {
   location / {
     resolver 127.0.0.11;
     
-    proxy_connect_timeout {{ $element.ServiceProxyTimeout }};
     proxy_send_timeout {{ $element.ServiceProxyTimeout }};
     proxy_read_timeout {{ $element.ServiceProxyTimeout }};
+    proxy_connect_timeout {{ $element.ServiceProxyTimeout }};
 
     proxy_pass http://{{ $element.ServiceName }}:{{ $element.ServicePort }}{{ $element.ServicePath }};
   }
@@ -44,9 +44,9 @@ server {
   location / {
     resolver 127.0.0.11;
     
-    proxy_connect_timeout {{ $element.ServiceProxyTimeout }};
     proxy_send_timeout {{ $element.ServiceProxyTimeout }};
     proxy_read_timeout {{ $element.ServiceProxyTimeout }};
+    proxy_connect_timeout {{ $element.ServiceProxyTimeout }};
 
     proxy_pass http://{{ $element.ServiceName }}:{{ $element.ServicePort }}{{ $element.ServicePath }};
   }

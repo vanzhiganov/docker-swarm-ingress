@@ -48,7 +48,7 @@ ENV LUA_CPATH="/usr/local/openresty/site/lualib/?.so;/usr/local/openresty/lualib
 ENV DOCKER_HOST "unix:///var/run/docker.sock"
 ENV UPDATE_INTERVAL "1"
 ENV OUTPUT_FILE "/usr/local/openresty/nginx/conf/conf.d/proxy.conf"
-ENV TEMPLATE_FILE "/etc/ingress/ingress.tpl"
+ENV TEMPLATE_FILE "/opt/ingress/ingress.tpl"
 ENV OPENRESTY_USER="openresty" \
     OPENRESTY_UID="8983" \
     OPENRESTY_GROUP="openresty" \
@@ -64,17 +64,18 @@ RUN openssl req -new -newkey rsa:2048 -days 3650 -nodes -x509 -subj '/CN=sni-sup
 	-keyout /etc/ssl/resty-auto-ssl-fallback.key \
 	-out /etc/ssl/resty-auto-ssl-fallback.crt
 
-COPY --from=build /src/ingress/ingress /usr/bin/ingress
 
 RUN mkdir -p /etc/resty-auto-ssl
 RUN mkdir -p /usr/local/openresty/nginx/conf/conf.d
-RUN mkdir -p /etc/ingress
+RUN mkdir -p /opt/ingress
+
+COPY --from=build /src/ingress/ingress /opt/ingress/ingress
 
 RUN chown openresty /etc/resty-auto-ssl
-ADD ingress/ingress.tpl /etc/ingress
+ADD ingress/ingress.tpl /opt/ingress
 ADD nginx.conf /usr/local/openresty/nginx/conf/nginx.conf
 
 HEALTHCHECK --interval=3s --timeout=3s \
 	CMD curl -f http://localhost/health || exit 1
 
-ENTRYPOINT ["/usr/bin/ingress"]
+ENTRYPOINT ["/opt/ingress/ingress"]
