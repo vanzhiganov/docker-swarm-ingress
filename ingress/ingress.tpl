@@ -18,7 +18,7 @@ server {
   }
   {{ else -}}
   location / {
-    resolver 127.0.0.11;
+    resolver 127.0.0.11 valid=30s;
     
     proxy_send_timeout {{ $element.ServiceProxyTimeout }};
     proxy_read_timeout {{ $element.ServiceProxyTimeout }};
@@ -42,7 +42,7 @@ server {
   }
 
   location / {
-    resolver 127.0.0.11;
+    resolver 127.0.0.11 valid=30s;
     
     proxy_send_timeout {{ $element.ServiceProxyTimeout }};
     proxy_read_timeout {{ $element.ServiceProxyTimeout }};
